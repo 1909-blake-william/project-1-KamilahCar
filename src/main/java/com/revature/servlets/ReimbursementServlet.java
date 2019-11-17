@@ -9,12 +9,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.daos.UserDao;
-import com.revature.models.User;
+import com.revature.daos.ReimbursementDao;
+import com.revature.models.Reimbursement;
 
-public class UserServlet extends HttpServlet {
+
+public class ReimbursementServlet extends HttpServlet{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	ObjectMapper om = new ObjectMapper();
-	UserDao userDao = UserDao.currentImplementation;
+	ReimbursementDao reimburseDao = ReimbursementDao.currentImplementation;
 	
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,11 +38,11 @@ public class UserServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//resp.getWriter().write("Hwllo");
-		List<User> users;
-		users = userDao.findAll();
-		String json = om.writeValueAsString(users);
+		List<Reimbursement> reimbursements = reimburseDao.findAll();
+		String json = om.writeValueAsString(reimbursements);
 
 		resp.addHeader("content-type", "application/json");
 		resp.getWriter().write(json);
 	}
+
 }
