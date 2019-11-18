@@ -33,11 +33,22 @@ public class UserServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//resp.getWriter().write("Hwllo");
-		List<User> users;
-		users = userDao.findAll();
+		
+		List<User> users = userDao.findAll();
+		for(int i = 0; i < users.size(); i++) {
+			users.get(i).setUserPass(String.valueOf(users.get(i).hashCode()));
+		}
 		String json = om.writeValueAsString(users);
 
 		resp.addHeader("content-type", "application/json");
 		resp.getWriter().write(json);
 	}
+	
+	/*@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		doGet(req, resp);
+		List<User> users;
+		users = userDao.findByUsername();
+		
+	}*/
 }

@@ -11,12 +11,14 @@
 Sign In
 <br>
 <br>
-<form name = "loginForm" action = "/Project1/login" method="post">
+<!--  <form name = "loginForm" onsubmit="login(event)"> -->
+<form name = "loginForm" action="/Project1/users" method="get">
+
 Username:<br>
-<input type="text" name="username">
+<input type="text" id="username"  placeholder="username">
   <br><br>
 Password:<br>
-  <input type="text" name="password">
+  <input type="password" id="password" placeholder="password">
   <br><br>
   <input type="submit" value="Submit">
 </form>

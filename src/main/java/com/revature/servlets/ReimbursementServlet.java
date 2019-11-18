@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.daos.ReimbursementDao;
 import com.revature.models.Reimbursement;
+import com.revature.models.User;
 
 
 public class ReimbursementServlet extends HttpServlet{
@@ -35,6 +36,8 @@ public class ReimbursementServlet extends HttpServlet{
 		super.service(req, resp);
 	}
 	@Override
+	//Manager can find all reimbursements
+	//
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//resp.getWriter().write("Hwllo");
@@ -44,5 +47,36 @@ public class ReimbursementServlet extends HttpServlet{
 		resp.addHeader("content-type", "application/json");
 		resp.getWriter().write(json);
 	}
+	@Override
+	//When a user submits a request it should be saved
+	//
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+		ObjectMapper om = new ObjectMapper();
+		Reimbursement currentReimbursement = (Reimbursement) om.readValue(req.getReader(), Reimbursement.class);
 
+		System.out.println(currentReimbursement);
+
+		reimburseDao.save(currentReimbursement);
+
+		String json = om.writeValueAsString(currentReimbursement);
+
+		resp.getWriter().write(json);
+		resp.setStatus(201); // created status code
+	}
+	@Override
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		doGet(req, resp);
+		ObjectMapper om = new ObjectMapper();
+		Reimbursement currentReimbursement = (Reimbursement) om.readValue(req.getReader(), Reimbursement.class);
+
+		System.out.println(currentReimbursement);
+		User loggedInUser = (User)req.getSession().getAttribute("user");
+		
+		reimburseDao.findByAuthor(loggedInUser.getId());
+
+		String json = om.writeValueAsString(currentReimbursement);
+
+		resp.getWriter().write(json);
+		
+	}
 }

@@ -21,7 +21,7 @@ public interface ReimbursementDao {
 	//Reimbursement findByStatusId(int id);
 	//Reimbursement findByTypeId(int id);
 	List<Reimbursement> findByAuthor(int author);
-	
+	int changeAuthor(Reimbursement changeAuthor);
 	
 	
  

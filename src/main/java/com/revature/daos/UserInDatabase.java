@@ -64,7 +64,7 @@ public class UserInDatabase implements UserDao {
 			return null;
 		}	
 	}
-	@Override
+	/*@Override
 	public int save(User currentUser) {
 		try(Connection employeeDatabase = ConnectionUtil.getConnection()){
 			String addSelection = "INSERT INTO ERS_USERS(ers_users_id, ERS_USERNAME, ERS_PASSWORD, USER_FIRSTNAME, USER_LASTNAME, USER_EMAIL, user_role_id) " + 
@@ -81,7 +81,7 @@ public class UserInDatabase implements UserDao {
 			e.printStackTrace();
 			return 0;
 		}
-	}
+	}*/
 	@Override
 	public List<User> findAll() {
 		// TODO Auto-generated method stub
