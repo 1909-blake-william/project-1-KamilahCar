@@ -7,6 +7,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.daos.UserDao;
 import com.revature.models.User;
@@ -14,6 +18,7 @@ import com.revature.models.User;
 public class AuthServlet extends HttpServlet {
 
 	private UserDao userDao = UserDao.currentImplementation;
+	private Logger logger = Logger.getLogger(getClass()); 
 
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -36,24 +41,46 @@ public class AuthServlet extends HttpServlet {
 		//change this
 		if ("/Project1/login".equals(req.getRequestURI())) {
 			User credentials = (User) om.readValue(req.getReader(), User.class);
-			//Getting input from textfields in  html form
-			/*String username = req.getParameter("");
-			String password = req.getParameter("");*/
+			logger.info("Object credentials created");
 			User loggedInUser = userDao.findByUsernameAndPassword(credentials.getUserName(), credentials.getUserPass());
-			/*String username = req.getParameter("username");
-			String password = req.getParameter("password"); */
+			logger.info("User object created");
+			//Admin login username = KCarlisle
+			//password = Admin_123@work
 			
-			//User loggedInUser = userDao.findByUsernameAndPassword(username, password);
+			//Getting input from textfields in  html form
+			/*String username = req.getParameter("username");
+			String password = req.getParameter("password");
+			
+			User loggedInUser = userDao.findByUsernameAndPassword(username, password);*/
 			if (loggedInUser == null) {
 				// Unauthorized status code
 				resp.setStatus(401); 
+				logger.error("Incorrect Login");
 				return;
 			} else {
 				//Successful Status Code
-				resp.setStatus(201);
-				req.getSession().setAttribute("user", loggedInUser);
-				resp.getWriter().write(om.writeValueAsString(loggedInUser));
-				return;
+				
+				/*req.getSession().setAttribute("user", loggedInUser);*/
+				try {
+					resp.setStatus(201);
+					req.getSession().setAttribute("user", loggedInUser);
+					/*HttpSession session = req.getSession();
+					session.setAttribute("currentUser", loggedInUser);*/
+					resp.getWriter().write(om.writeValueAsString(loggedInUser));
+					logger.trace("Tracing");
+					resp.sendRedirect("EmployeeHomePage.jsp");					
+					/*if (credentials.getRoleId() == 1) {
+						resp.sendRedirect("AdminHmePage.jsp");
+						return;
+					} else {
+						resp.sendRedirect("EmployeeHomePage.jsp");
+						return;
+					}*/
+				} catch(IOException e) {
+					logger.error("JSON error");
+				}
+				
+				
 			}
 		}
 	}

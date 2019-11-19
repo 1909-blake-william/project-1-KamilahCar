@@ -7,10 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.revature.models.Reimbursement;
 import com.revature.models.User;
 import com.revature.util.*;
 
 public class UserInDatabase implements UserDao {
+	User user;
 	User extractUser(ResultSet rs) throws SQLException{
 		int id = rs.getInt("ERS_USERS_ID");
 		String username = rs.getString("ERS_USERNAME");
@@ -42,13 +44,12 @@ public class UserInDatabase implements UserDao {
 			return null;
 		}
 	}
-
+	
 	@Override
 	public User findByUsernameAndPassword(String userName, String userPass) {
 		// TODO Auto-generated method stub
 		try(Connection employeeDatabase = ConnectionUtil.getConnection()){
-			String findSelection = "SELECT * FROM ERS_USERS WHERE "
-					+ "ERS_USERNAME = ? AND ERS_PASSWORD = ?";
+			String findSelection = "SELECT * FROM ERS_USERS WHERE ERS_USERNAME = ? AND ERS_PASSWORD = ?";
 			PreparedStatement ps = employeeDatabase.prepareStatement(findSelection);
 			ps.setString(1, userName);
 			ps.setString(2, userPass);
@@ -103,5 +104,21 @@ public class UserInDatabase implements UserDao {
 			return null;
 		}
 	}
+	@Override
+	public User currentUser() {
+		return user;
+	}
+	
+	/*public int updateResolver(User changeResolver) {
+		try(Connection employeeDatabase = ConnectionUtil.getConnection()){
+			String addSelection = "UPDATE ERS_REIMBURSEMENT WHERE REIMB_AUTHOR=?";
+			PreparedStatement ps = employeeDatabase.prepareStatement(addSelection);
+			ps.setInt(1, changeResolver.getId());
+			return ps.executeUpdate();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}*/
 
 }

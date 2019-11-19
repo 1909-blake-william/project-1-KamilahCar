@@ -63,22 +63,10 @@ public class ReimbursementInDatabase implements ReimbursementDao {
 		}
 	}
 	@Override
-	public List <Reimbursement> findById(int id, String idName) {
+	public List <Reimbursement> findById(int id) {
 		List<Reimbursement> reimbursements = new ArrayList<Reimbursement>();
 		try(Connection employeeDatabase = ConnectionUtil.getConnection()){
-			String findSelection = "";
-			if (idName.equalsIgnoreCase("type")) {
-				findSelection = "SELECT * FROM ERS_REIMBURSEMENT WHERE typeId = ?";
-			} else if (idName.equalsIgnoreCase("status")) {
-				//I want both the Reimbursement specified by the Id and the status String
-				//attached to the status id
-				findSelection = "SELECT * FROM ERS_REIMBURSEMENT r "
-						+ "LEFT JOIN ERS_REIMBURSEMENT_STATUS ON "
-						+ "(t.REIMB_TYPE_ID = r.REIMB_TYPE_ID) AND statusId = ?";
-			} else {
-				findSelection = "SELECT * FROM ERS_REIMBURSEMENT WHERE id = ?";
-			}
-			
+			String findSelection = "SELECT * FROM ERS_REIMBURSEMENT WHERE REIMB_ID = ?";
 			PreparedStatement ps = employeeDatabase.prepareStatement(findSelection);
 			ps.setInt(1, id);
 			ResultSet rs = ps.executeQuery();
@@ -123,7 +111,7 @@ public class ReimbursementInDatabase implements ReimbursementDao {
 		}
 	}
 	@Override
-	public int changeStatus(Reimbursement changeStatus) {
+	public int updateStatus(Reimbursement changeStatus) {
 		// TODO Auto-generated method stub
 		
 		try(Connection employeeDatabase = ConnectionUtil.getConnection()){
@@ -140,13 +128,10 @@ public class ReimbursementInDatabase implements ReimbursementDao {
 	public List <Reimbursement> findByStatus(int statusId) {
 		List<Reimbursement> reimbursements = new ArrayList<Reimbursement>();
 		try(Connection employeeDatabase = ConnectionUtil.getConnection()){
-			String updateSelection = "UPDATE ERS_REIMBURSEMENT WHERE REIMB_STATUS_ID=?";
 			String joinSelection = "SELECT * FROM ERS_REIMBURSEMENT r LEFT JOIN "
 					+ "ERS_REIMBURSEMENT_STATUS s "
-					+ "ON (r.REIMB_STATUS_ID = s.REIMB_STATUS_ID)";
-			PreparedStatement psUpdate = employeeDatabase.prepareStatement(updateSelection);
-			psUpdate.setInt(1, statusId);
-			psUpdate.executeUpdate();
+					+ "ON (r.REIMB_STATUS_ID = s.REIMB_STATUS_ID) WHERE REIMB_STATUS_ID=?";
+			
 			PreparedStatement psJoin = employeeDatabase.prepareStatement(joinSelection);
 			ResultSet rs = psJoin.executeQuery();
 			while (rs.next()) {
@@ -160,11 +145,23 @@ public class ReimbursementInDatabase implements ReimbursementDao {
 		}
 	}
 	@Override
-	public int changeAuthor(Reimbursement changeAuthor) {
+	public int updateAuthor(Reimbursement changeAuthor) {
 		try(Connection employeeDatabase = ConnectionUtil.getConnection()){
 			String addSelection = "UPDATE ERS_REIMBURSEMENT WHERE REIMB_AUTHOR=?";
 			PreparedStatement ps = employeeDatabase.prepareStatement(addSelection);
 			ps.setInt(1, changeAuthor.getAuthor());
+			return ps.executeUpdate();
+		} catch(SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	@Override
+	public int updateResolver(Reimbursement changeResolver) {
+		try(Connection employeeDatabase = ConnectionUtil.getConnection()){
+			String addSelection = "UPDATE ERS_REIMBURSEMENT WHERE REIMB_AUTHOR=?";
+			PreparedStatement ps = employeeDatabase.prepareStatement(addSelection);
+			ps.setInt(1, changeResolver.getResolver());
 			return ps.executeUpdate();
 		} catch(SQLException e) {
 			e.printStackTrace();

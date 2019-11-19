@@ -6,7 +6,8 @@
 </head>
 <body>
 
+<button class = "employeeHomePage">Submit Requests</button>
 <button class = "adminHomePage">Check Requests</button>
-<button class = "adminHomePage">Check Requests</button>
+<button class = "adminHomePage">Past Requests</button>
 </body>
 </html>

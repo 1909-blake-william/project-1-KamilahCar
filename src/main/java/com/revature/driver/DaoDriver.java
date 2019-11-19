@@ -24,7 +24,7 @@ public class DaoDriver {
 		reimburseDao.findAll().forEach(reimb -> {
 			System.out.println(reimb);
 		});
-		User currentUser = userDao.findByUsername("KCarlisle");
+		User currentUser = userDao.findByUsernameAndPassword("KCarlisle", "Admin_123@work");
 		System.out.println(currentUser);
 		
 		System.out.println("find all reimbursements for this user");

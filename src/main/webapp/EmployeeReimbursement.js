@@ -7,7 +7,7 @@ function addEvent(el, type, handler) {
 
 }
 
-function login(event) {
+/*function login(event) {
     event.preventDefault();
 
     const username = document.getElementById('username').value;
@@ -34,8 +34,7 @@ function login(event) {
             document.getElementById('error-message').innerText = 'Failed to login';
         }
     })
-
+}*/
 /*Do filtering on server side*/
 //Here is where you can define your submit button for login page
 //Approve or deny function button for pending requests and back button
-}

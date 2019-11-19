@@ -13,15 +13,15 @@ public interface ReimbursementDao {
 	List<Reimbursement> findAll();
 	//Reimbursemnt save();
 	int save(Reimbursement newReimbursement);
-	int changeStatus(Reimbursement changeStatus);
-	
+	int updateStatus(Reimbursement changeStatus);
 	List <Reimbursement> findByStatus(int statusId);
 	//Use for id, type id, status id
-	List <Reimbursement> findById(int id, String idName);
+	List <Reimbursement> findById(int id);
 	//Reimbursement findByStatusId(int id);
 	//Reimbursement findByTypeId(int id);
 	List<Reimbursement> findByAuthor(int author);
-	int changeAuthor(Reimbursement changeAuthor);
+	int updateAuthor(Reimbursement changeAuthor);
+	int updateResolver(Reimbursement changeAuthor);
 	
 	
  
